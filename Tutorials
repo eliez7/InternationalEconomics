@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>International Economics - Tutorial Practice Exam</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --success: #16a34a;
+            --error: #dc2626;
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            margin: 0;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .nav-btn:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .quiz-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-item:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+        .option-item.correct {
+            background: #dcfce7;
+            border-color: var(--success);
+            color: #166534;
+            font-weight: 600;
+        }
+        .option-item.incorrect {
+            background: #fee2e2;
+            border-color: var(--error);
+            color: #991b1b;
+        }
+        .feedback {
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .score-board {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #eff6ff;
+            border-radius: 8px;
+            border: 1px solid #bfdbfe;
+        }
+        .back-menu-btn {
+            background: #64748b;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        .back-menu-btn:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>International Economics Exam Prep</h1>
+        <p>Select a tutorial module to start practicing</p>
+    </header>
+
+    <div id="menu-view">
+        <div class="nav-grid">
+            <button class="nav-btn" onclick="loadTutorial(1)">Tutorial 1<br><small style="font-weight:normal;font-size:0.8rem;">Ricardian Model & Gravity</small></button>
+            <button class="nav-btn" onclick="loadTutorial(2)">Tutorial 2<br><small style="font-weight:normal;font-size:0.8rem;">Specific Factors</small></button>
+            <button class="nav-btn" onclick="loadTutorial(3)">Tutorial 3<br><small style="font-weight:normal;font-size:0.8rem;">Heckscher-Ohlin Model</small></button>
+            <button class="nav-btn" onclick="loadTutorial(4)">Tutorial 4<br><small style="font-weight:normal;font-size:0.8rem;">Tariffs & Trade Policy</small></button>
+        </div>
+    </div>
+
+    <div id="quiz-view" style="display:none;">
+        <button class="back-menu-btn" onclick="returnToMenu()">← Back to Tutorials</button>
+        <div class="score-board">
+            <span id="tutorial-title">Tutorial</span> Score: <span id="score">0</span> / <span id="total">0</span>
+        </div>
+        <div id="quiz-container"></div>
+    </div>
+</div>
+
+<script>
+    const tutorials = {
+        1: {
+            title: "Tutorial 1: The Ricardian Model & Gravity",
+            questions: [
+                {
+                    question: "1. Based on the gravity model, evaluate the statement: Mexico is close to the U.S. and trades heavily with it, while Brazil is far from both and splits trade. We should:",
+                    options: [
+                        "A. Disagree, because distance is the sole driver of trade volume.",
+                        "C. Disagree, because the gravity model incorporates economic size (GDP), meaning Brazil trades significantly with large U.S. and E.U. markets despite distance.",
+                        "B. Agree, because countries equidistant from major markets split trade equally.",
+                        "D. Agree, because GDP has no statistical impact on bilateral trade flows."
+                    ],
+                    answer: 1
+                },
+                {
+                    question: "2. A country has a comparative advantage in producing a good if:",
+                    options: [
+                        "A. Its opportunity cost of producing that good in terms of other goods is lower than in the other country.",
+                        "B. It requires more absolute labor hours than its trading partner.",
+                        "C. It maintains strict import quotas.",
+                        "D. Its nominal wage rate is lower."
+                    ],
+                    answer: 0
+                },
+                {
+                    question: "3. When one country can produce a unit of a good with less labor than another country, it possesses a(n):",
+                    options: [
+                        "A. Comparative advantage",
+                        "B. Absolute advantage",
+                        "C. Competitive subsidy",
+                        "D. Factor abundance"
+                    ],
+                    answer: 1
+                },
+                {
+                    question: "4. If a country's production possibilities frontier is drawn as a straight line, production occurs under conditions of:",
+                    options: [
+                        "A. Increasing opportunity costs",
+                        "B. Constant opportunity costs",
+                        "C. Decreasing opportunity costs",
+                        "D. Variable returns to scale"
+                    ],
+                    answer: 1
+                }
+            ]
+        },
+        2: {
+            title: "Tutorial 2: Specific Factors Model",
+            questions: [
+                {
+                    question: "1. What key structural feature does the specific factors model incorporate regarding factor mobility?",
+                    options: [
+                        "A. All factors are completely mobile across all economic sectors.",
+                        "B. Some factors (like labor) are mobile across sectors, while others (like capital or land) are strictly sector-specific.",
+                        "C. There is only one factor of production in the entire economy.",
+                        "D. Factors are entirely immobile internationally."
+                    ],
+                    answer: 1
+                },
+                {
+                    question: "2. In each sector of a specific factors economy, profit-maximizing employers hire labor up to the point where:",
+                    options: [
+                        "A. The marginal product of labor equals the wage rate.",
+                        "B. Product price equals the nominal wage.",
+                        "C. The marginal product of labor times the price of the product equals the wage rate (value of marginal product equals wage).",
+                        "D. Total revenue equals total fixed costs."
+                    ],
+                    answer: 2
+                },
+                {
+                    question: "3. The fundamental reason why international trade benefits a country overall is that it:",
+                    options: [
+                        "A. Increases reliance on foreign central banks.",
+                        "B. Expands the economy's overall consumption possibilities choices beyond domestic production limits.",
+                        "C. Guarantees that every individual citizen experiences higher real wages.",
+                        "D. Eliminates all domestic competition."
+                    ],
+                    answer: 1
+                }
+            ]
+        },
+        3: {
+            title: "Tutorial 3: Heckscher-Ohlin Model",
+            questions: [
+                {
+                    question: "1. What core theorem states that an increase in the relative price of a good leads to a rise in the return to the factor used intensively in that good?",
+                    options: [
+                        "A. The Stolper-Samuelson theorem",
+                        "B. The Rybczynski theorem",
+                        "C. The factor-price equalization theorem",
+                        "D. The Heckscher-Ohlin theorem"
+                    ],
+                    answer: 0
+                },
+                {
+                    question: "2. What did economist Wassily Leontief discover when testing the Heckscher-Ohlin model on U.S. trade data?",
+                    options: [
+                        "A. U.S. exports were substantially more capital-intensive than U.S. imports.",
+                        "B. U.S. exports were actually less capital-intensive (and more labor-intensive) than U.S. imports, creating the 'Leontief Paradox'.",
+                        "C. Trade patterns matched theoretical predictions with 100% accuracy.",
+                        "D. Capital mobility was zero worldwide."
+                    ],
+                    answer: 1
+                }
+            ]
+        },
+        4: {
+            title: "Tutorial 4: Tariffs and Trade Policy",
+            questions: [
+                {
+                    question: "1. When a large importing country imposes an import tariff, what is the net effect on its national welfare?",
+                    options: [
+                        "A. It always suffers absolute welfare loss with no offsetting benefits.",
+                        "B. It may experience a net welfare gain if its terms-of-trade improvement outweighs deadweight consumption and production losses.",
+                        "C. National welfare remains perfectly unchanged.",
+                        "D. Consumer surplus increases while producer surplus drops to zero."
+                    ],
+                    answer: 1
+                },
+                {
+                    question: "2. What is a defining economic characteristic of an import quota compared to an equivalent tariff under domestic monopoly conditions?",
+                    options: [
+                        "A. An import quota limits market competition more strictly, effectively transforming a domestic monopoly into a more aggressive single-price setter.",
+                        "B. An import quota automatically guarantees tax revenue for the government.",
+                        "C. There is zero difference in market structure effects.",
+                        "D. Quotas eliminate domestic deadweight loss entirely."
+                    ],
+                    answer: 0
+                }
+            ]
+        }
+    };
+
+    let currentScore = 0;
+    let answeredCount = 0;
+    let activeTutorialId = null;
+
+    function loadTutorial(id) {
+        activeTutorialId = id;
+        const tut = tutorials[id];
+        currentScore = 0;
+        answeredCount = 0;
+
+        document.getElementById("menu-view").style.display = "none";
+        document.getElementById("quiz-view").style.display = "block";
+        document.getElementById("tutorial-title").innerText = tut.title;
+        document.getElementById("score").innerText = currentScore;
+        document.getElementById("total").innerText = tut.questions.length;
+
+        const container = document.getElementById("quiz-container");
+        container.innerHTML = "";
+
+        tut.questions.forEach((q, qIndex) => {
+            const card = document.createElement("div");
+            card.className = "quiz-card";
+
+            let optionsHtml = "";
+            q.options.forEach((opt, oIndex) => {
+                optionsHtml += `<li class="option-item" onclick="selectOption(${qIndex}, ${oIndex}, this)">${opt}</li>`;
+            });
+
+            card.innerHTML = `
+                <div class="question-title">${q.question}</div>
+                <ul class="options-list">${optionsHtml}</ul>
+                <div class="feedback" id="feedback-${qIndex}"></div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function returnToMenu() {
+        document.getElementById("quiz-view").style.display = "none";
+        document.getElementById("menu-view").style.display = "block";
+    }
+
+    function selectOption(qIndex, oIndex, element) {
+        const card = element.closest(".quiz-card");
+        const options = card.querySelectorAll(".option-item");
+        const feedback = document.getElementById(`feedback-${qIndex}`);
+
+        if (card.getAttribute("data-answered") === "true") return;
+        card.setAttribute("data-answered", "true");
+
+        answeredCount++;
+        const tut = tutorials[activeTutorialId];
+        const correctOpt = tut.questions[qIndex].answer;
+
+        if (oIndex === correctOpt) {
+            element.classList.add("correct");
+            feedback.style.color = "var(--success)";
+            feedback.innerText = "Correct!";
+            currentScore++;
+            document.getElementById("score").innerText = currentScore;
+        } else {
+            element.classList.add("incorrect");
+            options[correctOpt].classList.add("correct");
+            feedback.style.color = "var(--error)";
+            feedback.innerText = `Incorrect. The correct answer is: ${tut.questions[qIndex].options[correctOpt]}`;
+        }
+    }
+</script>
+
+</body>
+</html>
